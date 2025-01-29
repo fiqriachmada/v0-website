@@ -26,8 +26,10 @@ type TranslationKey =
   | "systemLanguage"
   | "systemTheme"
   | "messageMinLength"
-
-type Language = "en" | "id" | "zh" | "es" | "ms" | "ar"
+  | "nameRequired"
+  | "invalidEmail";
+  
+export type Language = "en" | "id" | "zh" | "es" | "ms" | "ar";
 
 const translations: Record<TranslationKey, Record<Language, string>> = {
   welcome: {
@@ -246,13 +248,31 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
     ms: "Mesej mestilah sekurang-kurangnya 20 aksara",
     ar: "يجب أن تكون الرسالة 20 حرفًا على الأقل",
   },
-}
+  nameRequired: {
+    en: "Name is required",
+    id: "Nama wajib diisi",
+    zh: "姓名为必填项",
+    es: "El nombre es obligatorio",
+    ms: "Nama diperlukan",
+    ar: "الاسم مطلوب",
+  },
+  invalidEmail: {
+    en: "Invalid email address",
+    id: "Alamat email tidak valid",
+    zh: "无效的电子邮件地址",
+    es: "Dirección de correo electrónico inválida",
+    ms: "Alamat e-mel tidak sah",
+    ar: "عنوان البريد الإلكتروني غير صالح",
+  },
+};
 
-export const getTranslation = (key: TranslationKey, language: Language): string => {
+export const getTranslation = (
+  key: TranslationKey,
+  language: Language
+): string => {
   if (!translations[key]) {
-    console.error(`Translation key "${key}" not found`)
-    return key
+    console.error(`Translation key "${key}" not found`);
+    return key;
   }
-  return translations[key][language] || translations[key]["en"] || key
-}
-
+  return translations[key][language] || translations[key]["en"] || key;
+};
