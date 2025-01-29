@@ -16,11 +16,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Contact() {
   const { language, systemLanguage } = useAppStore();
   const effectiveLanguage = language === "system" ? systemLanguage : language;
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const formSchema = z.object({
     name: z
@@ -45,25 +46,20 @@ export default function Contact() {
       email: "",
       message: "",
     },
-    mode: "onChange", // Add this to enable real-time validation
+    mode: "onSubmit", // Changed to onSubmit
   });
 
   // Update validation messages when language changes
   useEffect(() => {
-    if (form.formState.isSubmitted) {
-      form.trigger(); // Re-validate all fields when language changes after first submit
+    if (isSubmitted) {
+      form.trigger();
     }
-  }, [form]); // Removed unnecessary dependency: effectiveLanguage
-
-  // Trigger validation on mount
-  useEffect(() => {
-    form.trigger(); // This will show validation errors immediately
-  }, [form]);
+  }, [form, isSubmitted]); // Removed unnecessary dependency: effectiveLanguage
 
   const onSubmit = (data: FormValues) => {
     console.log("Form submitted:", data);
     // Here you would typically send the form data to your backend
-    form.reset();
+    setIsSubmitted(true);
   };
 
   return (
