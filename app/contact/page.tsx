@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAppStore } from "@/store/appStore";
-import { getTranslation } from "@/utils/translations";
+import { getTranslation, Language } from "@/utils/translations";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,26 +16,34 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 export default function Contact() {
   const { language, systemLanguage } = useAppStore();
   const effectiveLanguage = language === "system" ? systemLanguage : language;
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const formSchema = z.object({
-    name: z
-      .string()
-      .min(1, { message: getTranslation("nameRequired", effectiveLanguage) }),
-    email: z
-      .string()
-      .email({ message: getTranslation("invalidEmail", effectiveLanguage) }),
-    message: z
-      .string()
-      .min(20, {
-        message: getTranslation("messageMinLength", effectiveLanguage),
+  // Memoized validation schema to prevent unnecessary re-renders
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        name: z
+          .string()
+          .min(1, {
+            message: getTranslation("nameRequired", effectiveLanguage),
+          }),
+        email: z
+          .string()
+          .email({
+            message: getTranslation("invalidEmail", effectiveLanguage),
+          }),
+        message: z
+          .string()
+          .min(20, {
+            message: getTranslation("messageMinLength", effectiveLanguage),
+          }),
       }),
-  });
+    [effectiveLanguage] // Update schema when language changes
+  );
 
   type FormValues = z.infer<typeof formSchema>;
 
@@ -46,20 +54,16 @@ export default function Contact() {
       email: "",
       message: "",
     },
-    mode: "onSubmit", // Changed to onSubmit
+    mode: "onChange", // Gunakan onChange agar validasi diperbarui saat user mengetik
   });
 
-  // Update validation messages when language changes
   useEffect(() => {
-    if (isSubmitted) {
-      form.trigger();
-    }
-  }, [form, isSubmitted]); // Removed unnecessary dependency: effectiveLanguage
+    form.reset(form.getValues()); // Reset agar error messages diperbarui sesuai bahasa baru
+  }, [effectiveLanguage, form]);
 
   const onSubmit = (data: FormValues) => {
     console.log("Form submitted:", data);
-    // Here you would typically send the form data to your backend
-    setIsSubmitted(true);
+    // Kirim form ke backend jika diperlukan
   };
 
   return (
