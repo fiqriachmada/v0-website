@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAppStore } from "@/store/appStore";
-import { getTranslation, Language } from "@/utils/translations";
+import { getTranslation } from "@/utils/translations";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function Contact() {
   const { language, systemLanguage } = useAppStore();
@@ -26,21 +26,15 @@ export default function Contact() {
   const formSchema = useMemo(
     () =>
       z.object({
-        name: z
-          .string()
-          .min(1, {
-            message: getTranslation("nameRequired", effectiveLanguage),
-          }),
-        email: z
-          .string()
-          .email({
-            message: getTranslation("invalidEmail", effectiveLanguage),
-          }),
-        message: z
-          .string()
-          .min(20, {
-            message: getTranslation("messageMinLength", effectiveLanguage),
-          }),
+        name: z.string().min(1, {
+          message: getTranslation("nameRequired", effectiveLanguage),
+        }),
+        email: z.string().email({
+          message: getTranslation("invalidEmail", effectiveLanguage),
+        }),
+        message: z.string().min(20, {
+          message: getTranslation("messageMinLength", effectiveLanguage),
+        }),
       }),
     [effectiveLanguage] // Update schema when language changes
   );
