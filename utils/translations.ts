@@ -3,6 +3,7 @@ type TranslationKey =
   | "homeDescription"
   | "contactUs"
   | "currentTheme"
+  | "currentLanguage" // <-- Tambahkan ini
   | "name"
   | "email"
   | "message"
@@ -63,6 +64,14 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
     es: "Tema actual",
     ms: "Tema semasa",
     ar: "السيم الحالي",
+  },
+  currentLanguage: {
+    en: "Current Language",
+    id: "Bahasa Terkini",
+    zh: "当前语言",
+    es: "Idioma Actual",
+    ms: "Bahasa Semasa",
+    ar: "اللغة الحالية",
   },
   name: {
     en: "Name",

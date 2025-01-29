@@ -30,24 +30,40 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-4">{getTranslation("welcome", effectiveLanguage)}</h1>
-      <p className="mb-4">{getTranslation("homeDescription", effectiveLanguage)}</p>
+      <h1 className="text-4xl font-bold mb-4">
+        {getTranslation("welcome", effectiveLanguage)}
+      </h1>
+      <p className="mb-4">
+        {getTranslation("homeDescription", effectiveLanguage)}
+      </p>
       <p className="mb-4">
         {getTranslation("currentTheme", effectiveLanguage)}:{" "}
-        {getTranslation(theme as "light" | "dark" | "system", effectiveLanguage)}
+        {getTranslation(
+          theme as "light" | "dark" | "system",
+          effectiveLanguage
+        )}
       </p>
       <p className="mb-4">
         {getTranslation("systemTheme", effectiveLanguage)}:{" "}
         {getTranslation(systemTheme as "light" | "dark", effectiveLanguage)}
       </p>
+      {/* Tambahkan bagian ini */}
+      <p className="mb-4">
+        {getTranslation("currentLanguage", effectiveLanguage)}:{" "}
+        {languages.find((lang) => lang.value === effectiveLanguage)?.label ||
+          effectiveLanguage}
+      </p>
       <p className="mb-4">
         {getTranslation("systemLanguage", effectiveLanguage)}:{" "}
-        {languages.find((lang) => lang.value === systemLanguage)?.label || systemLanguage}
+        {languages.find((lang) => lang.value === systemLanguage)?.label ||
+          systemLanguage}
       </p>
       <Button asChild>
-        <Link href="/contact">{getTranslation("contactUs", effectiveLanguage)}</Link>
+        <Link href="/contact">
+          {getTranslation("contactUs", effectiveLanguage)}
+        </Link>
       </Button>
     </div>
-  )
+  );
 }
 
